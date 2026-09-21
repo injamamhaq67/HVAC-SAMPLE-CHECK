@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-navy: #0f172a;
+  --color-brand-deep: #0d1322;
+  --color-brand-cardDark: #12183a;
+  --color-brand-gold: #f59e0b;
+  --color-brand-yellow: #FDB813;
+  --color-brand-accent: #facc15;
+  --color-brand-muted: #64748b;
+  --color-brand-lightBg: #f8fafc;
+  --color-brand-borderLight: #e2e8f0;
+
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  --shadow-card: 0 10px 30px -10px rgba(15, 23, 42, 0.08);
+  --shadow-card-hover: 0 20px 40px -15px rgba(15, 23, 42, 0.14);
+  --shadow-glass: 0 8px 32px 0 rgba(19, 27, 62, 0.12);
+  --shadow-form: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  --shadow-modal: 0 30px 60px -15px rgba(15, 23, 42, 0.35);
+}
+
+:root {
+  --fm-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --fm-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --fm-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes floatPath {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+.animate-float {
+  animation: floatPath 6s ease-in-out infinite;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.custom-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Micro-Interactions & Hover Physics */
+.fm-interactive-btn {
+  transition: transform 0.25s var(--fm-spring), box-shadow 0.25s var(--fm-spring), background-color 0.2s ease;
+}
+.fm-interactive-btn:hover {
+  transform: scale(1.025) translateY(-1px);
+}
+.fm-interactive-btn:active {
+  transform: scale(0.98) translateY(1px);
+}
+
+.fm-card-interactive {
+  transition: transform 0.35s var(--fm-spring), box-shadow 0.35s var(--fm-spring), border-color 0.3s ease;
+}
+.fm-card-interactive:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 22px 38px -12px rgba(15, 23, 42, 0.14);
+}
+
+/* Header Scrolled Glass Effect */
+header.header-scrolled {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-color: rgba(226, 232, 240, 0.8) !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.07);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
