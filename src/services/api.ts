@@ -1,7 +1,9 @@
 import type { AppointmentData } from '../types/appointment';
 
+const DEFAULT_N8N_WEBHOOK_URL = 'https://injuaura.app.n8n.cloud/webhook/hvac-booking';
+
 export const submitAppointmentLead = async (appointment: AppointmentData): Promise<{ success: boolean; data: AppointmentData; message: string }> => {
-  const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL;
+  const webhookUrl = import.meta.env.VITE_N8N_WEBHOOK_URL || DEFAULT_N8N_WEBHOOK_URL;
 
   const payload: AppointmentData = {
     ...appointment,
@@ -23,11 +25,29 @@ export const submitAppointmentLead = async (appointment: AppointmentData): Promi
         throw new Error(`Server returned status ${response.status}`);
       }
 
-      const resData = await response.json();
+      let message = 'Appointment request successfully submitted to dispatch service.';
+      try {
+        const text = await response.text();
+        if (text) {
+          try {
+            const resData = JSON.parse(text);
+            if (resData && typeof resData.message === 'string') {
+              message = resData.message;
+            }
+          } catch {
+            if (text.length < 200) {
+              message = text;
+            }
+          }
+        }
+      } catch {
+        // Text parsing fallback
+      }
+
       return {
         success: true,
         data: payload,
-        message: resData.message || 'Appointment request successfully submitted to dispatch service.'
+        message
       };
     } catch (err: unknown) {
       console.warn('Webhook dispatch failed, falling back to local handler:', err);
