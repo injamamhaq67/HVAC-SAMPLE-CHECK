@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Snowflake, Flame, Wrench, RotateCcw, Truck, Sun, CloudSun, Moon, Zap, User, Phone, Home, MapPin, Shield, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { X, Snowflake, Flame, Wrench, RotateCcw, Truck, Sun, CloudSun, Moon, Zap, User, Phone, Home, MapPin, Shield, Lock, ArrowRight, Loader2, Mail } from 'lucide-react';
 import { useAppointment } from '../context/AppointmentContext';
 import { submitAppointmentLead } from '../services/api';
 
@@ -32,6 +32,7 @@ export const AppointmentModal: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
+    email: '',
     address: '',
     zipCode: '28202',
     notes: '',
@@ -68,6 +69,11 @@ export const AppointmentModal: React.FC = () => {
     } else if (!/^[0-9()\s+-]{7,15}$/.test(formData.phone)) {
       errs.phone = 'Please enter a valid phone number';
     }
+    if (!formData.email.trim()) {
+      errs.email = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errs.email = 'Please enter a valid email address';
+    }
     if (!formData.address.trim()) errs.address = 'Service address is required';
     if (!formData.zipCode.trim()) errs.zipCode = 'Zip code is required';
 
@@ -85,7 +91,7 @@ export const AppointmentModal: React.FC = () => {
       const payload = {
         name: formData.name,
         phone: formData.phone,
-        email: `${formData.name.toLowerCase().replace(/\s+/g, '')}@example.com`,
+        email: formData.email,
         zipCode: formData.zipCode,
         service: selectedService,
         preferredDate: selectedDate,
@@ -322,22 +328,22 @@ export const AppointmentModal: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">Service Address / Street *</label>
+                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">Email Address *</label>
                   <div className="relative">
                     <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-                      <Home className="w-3.5 h-3.5" />
+                      <Mail className="w-3.5 h-3.5" />
                     </span>
                     <input
-                      type="text"
-                      value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      placeholder="Street address or unit"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="david@example.com"
                       className={`w-full pl-8 pr-3 py-2 bg-slate-50 border ${
-                        errors.address ? 'border-rose-400' : 'border-slate-200'
+                        errors.email ? 'border-rose-400' : 'border-slate-200'
                       } rounded-xl text-xs focus:ring-2 focus:ring-brand-yellow focus:bg-white outline-none transition-all`}
                     />
                   </div>
-                  {errors.address && <p className="text-[10px] text-rose-500 mt-0.5">{errors.address}</p>}
+                  {errors.email && <p className="text-[10px] text-rose-500 mt-0.5">{errors.email}</p>}
                 </div>
 
                 <div>
@@ -357,6 +363,25 @@ export const AppointmentModal: React.FC = () => {
                     />
                   </div>
                   {errors.zipCode && <p className="text-[10px] text-rose-500 mt-0.5">{errors.zipCode}</p>}
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-[11px] font-semibold text-slate-600 mb-1">Service Address / Street *</label>
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <Home className="w-3.5 h-3.5" />
+                    </span>
+                    <input
+                      type="text"
+                      value={formData.address}
+                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      placeholder="Street address or unit"
+                      className={`w-full pl-8 pr-3 py-2 bg-slate-50 border ${
+                        errors.address ? 'border-rose-400' : 'border-slate-200'
+                      } rounded-xl text-xs focus:ring-2 focus:ring-brand-yellow focus:bg-white outline-none transition-all`}
+                    />
+                  </div>
+                  {errors.address && <p className="text-[10px] text-rose-500 mt-0.5">{errors.address}</p>}
                 </div>
               </div>
 
